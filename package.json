@@ -6,7 +6,6 @@
     "generate-cards-meanings": "casperjs scrap.js"
   },
   "author": "Georgi Naumov",
-  "license": "ISC",
   "private": true,
   "devDependencies": {
     "casperjs": "^1.1.3",
