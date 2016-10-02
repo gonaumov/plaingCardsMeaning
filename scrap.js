@@ -20,6 +20,7 @@ casper.start(cardMeaningsUrl).then(function () {
           };
           var data = item.getAttribute("title").trim().split(/\s*,\s*/);
           out["card_name"] = data.shift();
+          out["image_path"] = window.location.origin + item.getAttribute("src");
           while(data.length != 0) {
              var currentDate = data.shift().trim().split("/");
              var month = parseInt(currentDate.shift(), 10);
@@ -31,11 +32,18 @@ casper.start(cardMeaningsUrl).then(function () {
           }
           return out;
       });
-  });    
+  });
+  // here we will save the images.
+  extractedData = extractedData.map(function(item) {
+     var imageName = (item.image_path.match(/[^\/.]+\.[a-z]{3}$/i) || [false])[0]; 
+     var newPath = "images/" + imageName;
+     this.download(item.image_path, newPath);
+     item.image_path = newPath;
+     return item;
+  },casper);     
 });
 
 casper.run(function() {
   this.saveJSON(extractedData);
-  this.echo("All done! Check file result.json in the same directory.");
-  this.exit();
+  this.echo("All done! Check file result.json in the same directory.").exit();
 });
